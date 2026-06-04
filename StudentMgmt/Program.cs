@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using StudentModels;
+using AppService;
 
 namespace StudentManagementSystem
 {
     internal class Program
     {
-        static List<string> firstNames = new List<string>();
-        static List<string> lastNames = new List<string>();
-        static List<string> studentNumbers = new List<string>();
-        static List<string> contactNumbers = new List<string>();
-        static List<string> addresses = new List<string>();
-        static List<string> status = new List<string>();
+        static StudentService service = new StudentService();
 
         static void Main(string[] args)
         {
@@ -77,27 +74,27 @@ namespace StudentManagementSystem
 
         static void EnrollStudent()
         {
+            Student student = new Student();
+
             Console.Write("\nFirst Name: ");
-            string fName = Console.ReadLine();
+            student.FirstName = Console.ReadLine();
 
             Console.Write("Last Name: ");
-            string lName = Console.ReadLine();
+            student.LastName = Console.ReadLine();
 
             Console.Write("Student Number: ");
-            string studNum = Console.ReadLine();
+            student.StudentNumber = Console.ReadLine();
 
             Console.Write("Contact Number: ");
-            string conNum = Console.ReadLine();
+            student.ContactNumber = Console.ReadLine();
 
             Console.Write("Address: ");
-            string address = Console.ReadLine();
+            student.Address = Console.ReadLine();
 
-            firstNames.Add(fName);
-            lastNames.Add(lName);
-            studentNumbers.Add(studNum);
-            contactNumbers.Add(conNum);
-            addresses.Add(address);
-            status.Add("Active");
+            
+            student.Status = "Active";
+
+            service.EnrollStudent(student);
 
             Console.WriteLine("\nStudent Enrolled Successfully!");
             MainMenu();
@@ -105,22 +102,22 @@ namespace StudentManagementSystem
 
         static void ViewStudents()
         {
+            List<Student> students = service.ViewStudents();
             Console.WriteLine("\n----- STUDENT LIST -----");
 
-            if (firstNames.Count == 0)
+            if (students.Count == 0)
             {
                 Console.WriteLine("No students found.");
             }
             else
             {
-                for (int i = 0; i < firstNames.Count; i++)
+                foreach (Student student in students)
                 {
-                    Console.WriteLine("\nStudent #" + (i + 1));
-                    Console.WriteLine("Name: " + firstNames[i] + " " + lastNames[i]);
-                    Console.WriteLine("Student Number: " + studentNumbers[i]);
-                    Console.WriteLine("Contact Number: " + contactNumbers[i]);
-                    Console.WriteLine("Address: " + addresses[i]);
-                    Console.WriteLine("Status: " + status[i]);
+                    Console.WriteLine("Name: " + student.FirstName + " " + student.LastName);
+                    Console.WriteLine("Student Number: " + student.StudentNumber);
+                    Console.WriteLine("Contact Number: " + student.ContactNumber);
+                    Console.WriteLine("Address: " + student.Address);
+                    Console.WriteLine("Status: " + student.Status);
                 }
             }
 
@@ -129,33 +126,31 @@ namespace StudentManagementSystem
 
         static void UpdateStudent()
         {
+            Student student = new Student();
+
             Console.Write("Enter Student Number: ");
-            string studNum = Console.ReadLine();
+            student.StudentNumber = Console.ReadLine();
 
-            bool found = false;
+            Console.Write("New First Name: ");
+            student.FirstName = Console.ReadLine();
 
-            for (int i = 0; i < studentNumbers.Count; i++)
+            Console.Write("New Last Name: ");
+            student.LastName = Console.ReadLine();
+
+            Console.Write("New Contact Number: ");
+            student.ContactNumber = Console.ReadLine();
+
+            Console.Write("New Address: ");
+            student.Address = Console.ReadLine();
+
+            service.UpdateStudent(student);
+
+
+            if (service.StudentExists(student.StudentNumber))
             {
-                if (studentNumbers[i] == studNum)
-                {
-                    Console.Write("First Name: ");
-                    firstNames[i] = Console.ReadLine();
-
-                    Console.Write("Last Name: ");
-                    lastNames[i] = Console.ReadLine();
-
-                    Console.Write("Contact Number: ");
-                    contactNumbers[i] = Console.ReadLine();
-
-                    Console.Write("Address: ");
-                    addresses[i] = Console.ReadLine();
-
-                    Console.WriteLine("Student Updated Successfully!");
-                    found = true;
-                }
+                Console.WriteLine("Student Updated Successfully!");
             }
-
-            if (!found)
+            else
             {
                 Console.WriteLine("Student Not Found.");
             }
@@ -165,29 +160,18 @@ namespace StudentManagementSystem
 
         static void DeleteStudent()
         {
+
             Console.Write("Enter Student Number: ");
-            string studNum = Console.ReadLine();
+            string studentNumber = Console.ReadLine();
 
-            bool found = false;
+            service.DeleteStudent(studentNumber);
 
-            for (int i = 0; i < studentNumbers.Count; i++)
+
+            if (service.StudentExists(studentNumber))
             {
-                if (studentNumbers[i] == studNum)
-                {
-                    firstNames.RemoveAt(i);
-                    lastNames.RemoveAt(i);
-                    studentNumbers.RemoveAt(i);
-                    contactNumbers.RemoveAt(i);
-                    addresses.RemoveAt(i);
-                    status.RemoveAt(i);
-
-                    Console.WriteLine("Student Deleted Successfully!");
-                    found = true;
-                    break;
-                }
+                Console.WriteLine("Student Deleted Successfully!");
             }
-
-            if (!found)
+            else
             {
                 Console.WriteLine("Student Not Found.");
             }
@@ -198,21 +182,16 @@ namespace StudentManagementSystem
         static void DeactivateStudent()
         {
             Console.Write("Enter Student Number: ");
-            string studNum = Console.ReadLine();
+            string studentNumber = Console.ReadLine();
 
-            bool found = false;
+            service.DeactivateStudent(studentNumber);
 
-            for (int i = 0; i < studentNumbers.Count; i++)
+
+            if (service.StudentExists(studentNumber))
             {
-                if (studentNumbers[i] == studNum)
-                {
-                    status[i] = "Deactivated";
-                    Console.WriteLine("Student Deactivated.");
-                    found = true;
-                }
+                Console.WriteLine("Student Deactivated.");
             }
-
-            if (!found)
+            else
             {
                 Console.WriteLine("Student Not Found.");
             }
@@ -223,21 +202,16 @@ namespace StudentManagementSystem
         static void StudentLeave()
         {
             Console.Write("Enter Student Number: ");
-            string studNum = Console.ReadLine();
+            string studentNumber = Console.ReadLine();
 
-            bool found = false;
+            service.StudentLeave(studentNumber);
 
-            for (int i = 0; i < studentNumbers.Count; i++)
+
+            if (service.StudentExists(studentNumber))
             {
-                if (studentNumbers[i] == studNum)
-                {
-                    status[i] = "On Leave";
-                    Console.WriteLine("Student Leave Approved.");
-                    found = true;
-                }
+                Console.WriteLine("Student Leave Approved.");
             }
-
-            if (!found)
+            else
             {
                 Console.WriteLine("Student Not Found.");
             }

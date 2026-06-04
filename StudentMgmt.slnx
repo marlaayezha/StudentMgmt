@@ -1,3 +1,6 @@
 <Solution>
   <Project Path="StudentMgmt/StudentMgmt.csproj" />
+  <Project Path="StudentMgmtAppService/StudentMgmtAppService.csproj" Id="3731d57b-1e09-4c21-9bdb-be1b6add490b" />
+  <Project Path="StudentMgmtDataService/StudentMgmtDataService.csproj" Id="90bcc7bb-5b67-40c2-a281-c53bc158ae5c" />
+  <Project Path="StudentMgmtModel/StudentMgmtModel.csproj" Id="5d3427b0-d6dc-4ffb-bc58-506706a71938" />
 </Solution>
