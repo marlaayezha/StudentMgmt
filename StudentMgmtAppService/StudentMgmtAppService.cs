@@ -6,7 +6,8 @@ namespace AppService
 {
     public class StudentService
     {
-        StudentDataService stud = new StudentDataService();
+        private StudentMgmtDataService stud = new StudentMgmtDataService();
+
 
         public void EnrollStudent(Student student)
         {
@@ -15,67 +16,54 @@ namespace AppService
                 return;
             }
 
-            stud.AddStudent(student);
+            stud.Add(student);
         }
 
         public void UpdateStudent(Student student)
         {
+            Student update = stud.GetByStudentNumber(student.StudentNumber);
 
-            Student update = stud.SearchStudent(student.StudentNumber);
-
-            if (student == null)
+            if (update == null)
             {
                 return;
             }
 
-            stud.UpdateStudent(update, student);
+            stud.Update(student);
         }
 
         public void DeleteStudent(string studentNumber)
         {
-
-            Student student = stud.SearchStudent(studentNumber);
-
-
-            if (student == null)
+            if (!stud.StudentExists(studentNumber))
             {
                 return;
             }
 
-            stud.DeleteStudent(student);
+            stud.Delete(studentNumber);
         }
 
         public void DeactivateStudent(string studentNumber)
         {
-
-            Student student = stud.SearchStudent(studentNumber);
-
-
-            if (student == null)
+            if (!stud.StudentExists(studentNumber))
             {
                 return;
             }
 
-            stud.DeactivateStudent(student);
+            stud.Deactivate(studentNumber);
         }
 
         public void StudentLeave(string studentNumber)
         {
-
-            Student student = stud.SearchStudent(studentNumber);
-
-
-            if (student == null)
+            if (!stud.StudentExists(studentNumber))
             {
                 return;
             }
 
-            stud.StudentLeave(student);
+            stud.Leave(studentNumber);
         }
 
         public Student SearchStudent(string studentNumber)
         {
-            return stud.SearchStudent(studentNumber);
+            return stud.GetByStudentNumber(studentNumber);
         }
 
         public bool StudentExists(string studentNumber)
@@ -85,13 +73,12 @@ namespace AppService
 
         public List<Student> ViewStudents()
         {
-            return stud.GetAllStudents();
+            return stud.GetStudents();
         }
 
         public int StudentCount()
         {
-            return stud.GetAllStudents().Count;
+            return stud.GetStudents().Count;
         }
     }
 }
-

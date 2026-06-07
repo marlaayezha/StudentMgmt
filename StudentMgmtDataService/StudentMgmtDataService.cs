@@ -1,56 +1,52 @@
-﻿using System.Collections.Generic;
+﻿using StudentDataService;
 using StudentModels;
+using System;
+using System.Collections.Generic;
 
 namespace DataService
 {
-    public class StudentDataService
+    public class StudentMgmtDataService
     {
-        List<Student> StudentList = new List<Student>();
+        IStudentMgmtDataService dataService = new StudentJsonData();
 
-        public List<Student> GetAllStudents()
+        public void Add(Student student)
         {
-            return StudentList;
+            dataService.Add(student);
         }
 
-        public void AddStudent(Student student)
+        public Student? GetByStudentNumber(string studentNumber)
         {
-            StudentList.Add(student);
+            return dataService.GetByStudentNumber(studentNumber);
         }
 
-        public void UpdateStudent(Student oldStudent, Student newStudent)
-        {
-            oldStudent.FirstName = newStudent.FirstName;
-            oldStudent.LastName = newStudent.LastName;
-            oldStudent.ContactNumber = newStudent.ContactNumber;
-            oldStudent.Address = newStudent.Address;
-        }
-
-        public void DeleteStudent(Student student)
-        {
-            StudentList.Remove(student);
-        }
-
-        public void DeactivateStudent(Student student)
-        {
-            student.Status = "Deactivated";
-        }
-
-        public void StudentLeave(Student student)
-        {
-            student.Status = "On Leave";
-        }
-
-        public Student SearchStudent(string studentNumber)
-        {
-            return StudentList.Find(x => x.StudentNumber == studentNumber);
-        }
         public bool StudentExists(string studentNumber)
         {
-            return StudentList.Exists(x => x.StudentNumber == studentNumber);
-            
+            return dataService.StudentExists(studentNumber);
         }
 
+        public void Update(Student student)
+        {
+            dataService.Update(student);
+        }
 
+        public void Delete(string studentNumber)
+        {
+            dataService.Delete(studentNumber);
+        }
+
+        public void Deactivate(string studentNumber)
+        {
+            dataService.Deactivate(studentNumber);
+        }
+
+        public void Leave(string studentNumber)
+        {
+            dataService.Leave(studentNumber);
+        }
+
+        public List<Student> GetStudents()
+        {
+            return dataService.GetStudents();
+        }
     }
 }
-

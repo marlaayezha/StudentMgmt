@@ -1,7 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using AppService;
+using DataService;
 using StudentModels;
-using AppService;
+using System;
+using System.Collections.Generic;
 
 namespace StudentManagementSystem
 {
@@ -91,7 +92,7 @@ namespace StudentManagementSystem
             Console.Write("Address: ");
             student.Address = Console.ReadLine();
 
-            
+
             student.Status = "Active";
 
             service.EnrollStudent(student);
@@ -113,7 +114,7 @@ namespace StudentManagementSystem
             {
                 foreach (Student student in students)
                 {
-                    Console.WriteLine("Name: " + student.FirstName + " " + student.LastName);
+                    Console.WriteLine("\nName: " + student.FirstName + " " + student.LastName);
                     Console.WriteLine("Student Number: " + student.StudentNumber);
                     Console.WriteLine("Contact Number: " + student.ContactNumber);
                     Console.WriteLine("Address: " + student.Address);
@@ -143,6 +144,8 @@ namespace StudentManagementSystem
             Console.Write("New Address: ");
             student.Address = Console.ReadLine();
 
+            student.Status = service.SearchStudent(student.StudentNumber).Status;
+
             service.UpdateStudent(student);
 
 
@@ -160,15 +163,13 @@ namespace StudentManagementSystem
 
         static void DeleteStudent()
         {
-
+            Student student = new Student();
             Console.Write("Enter Student Number: ");
-            string studentNumber = Console.ReadLine();
+            student.StudentNumber = Console.ReadLine();
 
-            service.DeleteStudent(studentNumber);
-
-
-            if (service.StudentExists(studentNumber))
+            if (service.StudentExists(student.StudentNumber))
             {
+                service.DeleteStudent(student.StudentNumber);
                 Console.WriteLine("Student Deleted Successfully!");
             }
             else
