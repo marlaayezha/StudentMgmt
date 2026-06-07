@@ -100,7 +100,7 @@ namespace StudentDataService
         {
             RetrieveDataFromJsonFile();
 
-            var existingStudent = students.FirstOrDefault(x => x.StudentId == student.StudentId);
+            var existingStudent = students.FirstOrDefault(x => x.StudentNumber == student.StudentNumber);
 
             if (existingStudent != null)
             {
