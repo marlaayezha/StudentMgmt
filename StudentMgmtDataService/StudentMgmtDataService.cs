@@ -7,7 +7,12 @@ namespace DataService
 {
     public class StudentMgmtDataService
     {
-        IStudentMgmtDataService dataService = new StudentJsonData();
+        IStudentMgmtDataService dataService = new StudentDatabaseDB();
+
+        public StudentMgmtDataService(IStudentMgmtDataService studentDatabaseDB)
+        {
+            dataService = studentDatabaseDB;
+        }
 
         public void Add(Student student)
         {

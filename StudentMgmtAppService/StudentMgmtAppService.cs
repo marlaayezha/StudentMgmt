@@ -6,7 +6,7 @@ namespace AppService
 {
     public class StudentService
     {
-        private StudentMgmtDataService stud = new StudentMgmtDataService();
+        private StudentMgmtDataService stud = new StudentMgmtDataService(new StudentDatabaseDB());
 
 
         public void EnrollStudent(Student student)
